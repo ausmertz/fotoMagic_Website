@@ -1,0 +1,2008 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foto Magic — Wedding Photography & Photobooth | Kathmandu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --off-black: #111111;
+    --charcoal: #1c1c1c;
+    --gold: #c9a84c;
+    --gold-light: #e8cc80;
+    --gold-pale: #f5e9c8;
+    --beige: #f0ebe2;
+    --beige-dark: #e2d9cc;
+    --warm-white: #faf8f4;
+    --white: #ffffff;
+    --text-muted: #888880;
+    --text-mid: #555550;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; font-size: 16px; }
+
+  body {
+    font-family: 'Jost', sans-serif;
+    background: var(--warm-white);
+    color: var(--off-black);
+    overflow-x: hidden;
+    font-weight: 300;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--beige); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 1000;
+    padding: 24px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    transition: all 0.5s ease;
+  }
+  nav.scrolled {
+    background: rgba(10,10,10,0.94);
+    backdrop-filter: blur(20px);
+    padding: 16px 48px;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 500;
+    color: var(--white);
+    letter-spacing: 0.08em;
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: color 0.3s;
+    font-weight: 400;
+  }
+  .nav-links a:hover { color: var(--gold-light); }
+  .nav-cta {
+    background: transparent;
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    padding: 10px 24px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+  .nav-cta:hover { background: var(--gold); color: var(--black); }
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .hamburger span { display: block; width: 24px; height: 1px; background: white; transition: all 0.3s; }
+
+  /* ─── HERO ─── */
+  #hero {
+    height: 100vh; min-height: 700px;
+    background: var(--black);
+    display: flex; align-items: flex-end;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1410 40%, #0f0c08 100%);
+  }
+  .hero-orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    animation: orb-float 8s ease-in-out infinite;
+  }
+  .hero-orb-1 { width: 600px; height: 600px; background: rgba(201,168,76,0.08); top: -100px; right: -100px; animation-delay: 0s; }
+  .hero-orb-2 { width: 400px; height: 400px; background: rgba(201,168,76,0.05); bottom: 100px; left: -80px; animation-delay: 3s; }
+  @keyframes orb-float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-30px) scale(1.05); } }
+
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+  }
+  /* Cinematic photo panels */
+  .hero-photos {
+    position: absolute; inset: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    gap: 0;
+    opacity: 0.22;
+  }
+  .hero-photo {
+    background: var(--charcoal);
+    position: relative; overflow: hidden;
+  }
+  .hero-photo::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.8));
+  }
+  .hp1 { background: linear-gradient(160deg, #2a1f10 0%, #1a1208 100%); }
+  .hp2 { background: linear-gradient(160deg, #1f1a12 0%, #120f08 100%); transform: translateY(40px); }
+  .hp3 { background: linear-gradient(160deg, #251c0e 0%, #1a1208 100%); }
+  .hp4 { background: linear-gradient(160deg, #201a0f 0%, #14100a 100%); transform: translateY(20px); }
+  .hp5 { background: linear-gradient(160deg, #2a2010 0%, #1c1408 100%); }
+
+  .hero-content {
+    position: relative; z-index: 10;
+    padding: 80px 80px;
+    max-width: 1200px;
+    animation: hero-rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0; transform: translateY(40px);
+  }
+  @keyframes hero-rise { to { opacity: 1; transform: translateY(0); } }
+
+  .hero-eyebrow {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 28px;
+  }
+  .hero-eyebrow-line { width: 40px; height: 1px; background: var(--gold); }
+  .hero-eyebrow span {
+    font-size: 0.68rem; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400;
+  }
+  .hero-h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(3.5rem, 7vw, 6.5rem);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 28px;
+  }
+  .hero-h1 em { font-style: italic; color: var(--gold-light); }
+  .hero-sub {
+    font-size: 1rem; color: rgba(255,255,255,0.5);
+    max-width: 440px; line-height: 1.7;
+    margin-bottom: 48px;
+    font-weight: 300;
+  }
+  .hero-actions { display: flex; gap: 20px; flex-wrap: wrap; }
+  .btn-gold {
+    background: var(--gold);
+    color: var(--black);
+    padding: 16px 36px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 500;
+    border: none; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: all 0.3s;
+  }
+  .btn-gold:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.3); }
+  .btn-ghost-light {
+    background: transparent;
+    color: rgba(255,255,255,0.7);
+    padding: 16px 36px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 400;
+    border: 1px solid rgba(255,255,255,0.2);
+    cursor: pointer; text-decoration: none; display: inline-block;
+    transition: all 0.3s;
+  }
+  .btn-ghost-light:hover { border-color: rgba(255,255,255,0.6); color: white; }
+
+  .hero-scroll {
+    position: absolute; right: 48px; bottom: 48px;
+    display: flex; flex-direction: column; align-items: center; gap: 12px;
+    color: rgba(255,255,255,0.3); font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 60px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scroll-line 2s ease-in-out infinite;
+  }
+  @keyframes scroll-line { 0%,100% { transform: scaleY(1); opacity: 0.6; } 50% { transform: scaleY(0.5); opacity: 1; } }
+
+  /* ─── SECTIONS COMMON ─── */
+  section { padding: 120px 0; }
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 48px; }
+  .section-label {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 20px;
+  }
+  .section-label-line { width: 32px; height: 1px; background: var(--gold); }
+  .section-label span {
+    font-size: 0.65rem; letter-spacing: 0.28em;
+    text-transform: uppercase; color: var(--gold);
+    font-weight: 400;
+  }
+  h2.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    font-weight: 300; line-height: 1.1;
+    color: var(--off-black);
+  }
+  h2.section-title.light { color: var(--white); }
+  h2.section-title em { font-style: italic; color: var(--gold); }
+
+  /* ─── INTRO / STORY ─── */
+  #story { background: var(--warm-white); }
+  .story-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 100px; align-items: center;
+  }
+  .story-visual {
+    position: relative; height: 560px;
+  }
+  .story-img-main {
+    position: absolute; left: 0; top: 0;
+    width: 78%; height: 420px;
+    background: linear-gradient(135deg, #1a1208 0%, #2a1f10 50%, #1c1610 100%);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .story-img-main::before {
+    content: '✦';
+    font-size: 4rem; color: rgba(201,168,76,0.15);
+  }
+  .story-img-accent {
+    position: absolute; right: 0; bottom: 0;
+    width: 55%; height: 280px;
+    background: var(--beige-dark);
+    border: 6px solid var(--warm-white);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .story-img-accent::before {
+    content: '❋';
+    font-size: 2.5rem; color: rgba(201,168,76,0.3);
+  }
+  .story-gold-bar {
+    position: absolute; left: -20px; top: 50%;
+    width: 4px; height: 120px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    transform: translateY(-50%);
+  }
+  .story-text { }
+  .story-text .section-title { margin-bottom: 28px; }
+  .story-body {
+    font-size: 1rem; line-height: 1.8; color: var(--text-mid);
+    margin-bottom: 20px;
+  }
+  .story-stats {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0; margin-top: 48px;
+    border-top: 1px solid var(--beige-dark);
+    padding-top: 40px;
+  }
+  .story-stat { text-align: center; padding: 0 20px; }
+  .story-stat:not(:last-child) { border-right: 1px solid var(--beige-dark); }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem; font-weight: 300; color: var(--gold);
+    display: block; line-height: 1;
+    margin-bottom: 6px;
+  }
+  .stat-label { font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--text-muted); }
+
+  /* ─── SERVICES INTRO ─── */
+  #services { background: var(--black); padding-bottom: 0; }
+  .services-intro-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: end;
+    margin-bottom: 80px;
+  }
+  .services-intro-right {
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding-bottom: 8px;
+  }
+  .services-tagline {
+    font-size: 1rem; color: rgba(255,255,255,0.45);
+    line-height: 1.7; margin-bottom: 28px;
+  }
+
+  /* ─── SERVICE CARDS ─── */
+  .services-cards {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 2px; margin-top: 0;
+  }
+  .service-card {
+    background: var(--charcoal);
+    padding: 60px 52px;
+    position: relative; overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s ease;
+    text-decoration: none;
+    display: block;
+  }
+  .service-card:hover { background: #1f1f1f; }
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), transparent);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+  .service-card:hover::before { transform: scaleX(1); }
+  .service-card-icon {
+    font-size: 1.8rem; margin-bottom: 28px; display: block;
+    filter: grayscale(0.5);
+    transition: filter 0.3s;
+  }
+  .service-card:hover .service-card-icon { filter: grayscale(0); }
+  .service-card-label {
+    font-size: 0.62rem; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 12px; display: block;
+  }
+  .service-card-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem; font-weight: 300;
+    color: var(--white); line-height: 1.15;
+    margin-bottom: 20px;
+  }
+  .service-card-desc {
+    font-size: 0.88rem; color: rgba(255,255,255,0.45);
+    line-height: 1.7;
+  }
+  .service-card-arrow {
+    position: absolute; bottom: 48px; right: 48px;
+    color: var(--gold); font-size: 1.2rem;
+    transform: translateX(0); transition: transform 0.3s;
+  }
+  .service-card:hover .service-card-arrow { transform: translateX(6px); }
+
+  /* ─── PACKAGES: WEDDING ─── */
+  #wedding { background: var(--warm-white); }
+  .packages-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px; margin-top: 64px;
+  }
+  .pkg-card {
+    border: 1px solid var(--beige-dark);
+    padding: 48px 36px;
+    position: relative;
+    transition: all 0.3s;
+    background: var(--white);
+  }
+  .pkg-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.08); }
+  .pkg-card.popular {
+    border-color: var(--gold);
+    background: var(--black);
+    color: var(--white);
+  }
+  .popular-badge {
+    position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--black);
+    font-size: 0.6rem; letter-spacing: 0.2em;
+    text-transform: uppercase; padding: 6px 18px;
+    font-weight: 500; white-space: nowrap;
+  }
+  .pkg-tier {
+    font-size: 0.62rem; letter-spacing: 0.26em;
+    text-transform: uppercase; color: var(--gold);
+    display: block; margin-bottom: 12px;
+  }
+  .pkg-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 300;
+    line-height: 1; margin-bottom: 8px;
+  }
+  .pkg-card.popular .pkg-name { color: var(--white); }
+  .pkg-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.8rem; font-weight: 300;
+    color: var(--gold); display: block;
+    margin-bottom: 4px; line-height: 1;
+  }
+  .pkg-price-sub { font-size: 0.72rem; color: var(--text-muted); letter-spacing: 0.1em; }
+  .pkg-card.popular .pkg-price-sub { color: rgba(255,255,255,0.4); }
+  .pkg-divider { border: none; border-top: 1px solid var(--beige-dark); margin: 28px 0; }
+  .pkg-card.popular .pkg-divider { border-color: rgba(255,255,255,0.12); }
+  .pkg-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .pkg-features li {
+    font-size: 0.88rem; line-height: 1.5;
+    display: flex; gap: 12px; align-items: flex-start;
+    color: var(--text-mid);
+  }
+  .pkg-card.popular .pkg-features li { color: rgba(255,255,255,0.65); }
+  .pkg-features li::before {
+    content: '✦'; color: var(--gold);
+    font-size: 0.55rem; margin-top: 5px;
+    flex-shrink: 0;
+  }
+  .btn-pkg {
+    width: 100%; padding: 14px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.7rem; letter-spacing: 0.18em;
+    text-transform: uppercase; font-weight: 500;
+    cursor: pointer; border: none;
+    transition: all 0.3s; text-decoration: none;
+    display: block; text-align: center;
+  }
+  .btn-pkg-outline {
+    background: transparent;
+    border: 1px solid var(--beige-dark);
+    color: var(--off-black);
+  }
+  .btn-pkg-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-pkg-gold {
+    background: var(--gold);
+    color: var(--black);
+  }
+  .btn-pkg-gold:hover { background: var(--gold-light); }
+
+  /* addons */
+  .addons-box {
+    margin-top: 48px;
+    border: 1px solid var(--beige-dark);
+    padding: 36px 40px;
+    background: var(--white);
+  }
+  .addons-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 400;
+    margin-bottom: 20px;
+  }
+  .addons-list {
+    display: flex; flex-wrap: wrap; gap: 12px;
+  }
+  .addon-pill {
+    background: var(--beige);
+    padding: 8px 18px;
+    font-size: 0.78rem; color: var(--text-mid);
+    border: 1px solid var(--beige-dark);
+  }
+  .addon-pill span { color: var(--gold); font-weight: 500; }
+
+  /* ─── PHOTOBOOTH ─── */
+  #photobooth { background: var(--black); }
+  .pb-header { margin-bottom: 80px; }
+  .pb-features {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 1px; background: rgba(255,255,255,0.06);
+    margin-bottom: 80px;
+  }
+  .pb-feature {
+    background: var(--black);
+    padding: 40px 32px;
+    text-align: center;
+  }
+  .pb-feature-icon { font-size: 1.6rem; display: block; margin-bottom: 16px; }
+  .pb-feature-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; color: var(--white);
+    margin-bottom: 8px;
+  }
+  .pb-feature-desc { font-size: 0.8rem; color: rgba(255,255,255,0.35); line-height: 1.6; }
+
+  .pb-packages-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+  .pkg-card.dark {
+    background: var(--charcoal);
+    border-color: rgba(255,255,255,0.08);
+    color: var(--white);
+  }
+  .pkg-card.dark .pkg-name { color: var(--white); }
+  .pkg-card.dark .pkg-features li { color: rgba(255,255,255,0.55); }
+  .pkg-card.dark .pkg-divider { border-color: rgba(255,255,255,0.1); }
+  .pkg-card.dark .pkg-price-sub { color: rgba(255,255,255,0.35); }
+  .btn-pkg-dark-outline {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+  }
+  .btn-pkg-dark-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  .pb-addons { margin-top: 48px; background: var(--charcoal); border: 1px solid rgba(255,255,255,0.06); padding: 36px 40px; }
+  .pb-addons .addons-title { color: var(--white); }
+  .addon-pill.dark { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.1); color: rgba(255,255,255,0.55); }
+
+  /* ─── COMBO ─── */
+  #combo { background: var(--beige); }
+  .combo-header { text-align: center; margin-bottom: 64px; }
+  .combo-header .section-label { justify-content: center; }
+  .combo-header .section-title { margin-bottom: 16px; }
+  .combo-sub { font-size: 1rem; color: var(--text-mid); max-width: 520px; margin: 0 auto; line-height: 1.7; }
+  .combo-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+  }
+  .combo-card {
+    background: var(--white);
+    border: 1px solid var(--beige-dark);
+    padding: 48px 36px;
+    position: relative;
+    transition: all 0.3s;
+  }
+  .combo-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.1); }
+  .combo-card.popular-combo {
+    background: var(--black); border-color: var(--gold);
+    color: var(--white);
+  }
+  .combo-includes {
+    display: flex; flex-direction: column; gap: 8px;
+    margin: 24px 0 28px;
+  }
+  .combo-includes-item {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 0.82rem; color: var(--text-mid);
+  }
+  .combo-card.popular-combo .combo-includes-item { color: rgba(255,255,255,0.6); }
+  .combo-includes-item::before { content: '+'; color: var(--gold); font-weight: 400; }
+  .combo-savings {
+    background: var(--gold-pale); color: var(--gold);
+    padding: 6px 14px; font-size: 0.72rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    display: inline-block; margin-bottom: 12px;
+    font-weight: 500;
+  }
+  .combo-card.popular-combo .combo-savings { background: rgba(201,168,76,0.15); }
+  .combo-value-prop {
+    font-size: 0.82rem; color: var(--text-muted);
+    font-style: italic; margin-top: 16px; line-height: 1.6;
+  }
+  .combo-card.popular-combo .combo-value-prop { color: rgba(255,255,255,0.35); }
+
+  /* ─── GALLERY ─── */
+  #gallery { background: var(--off-black); }
+  .gallery-header { margin-bottom: 56px; }
+  .gallery-mosaic {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(3, 180px);
+    gap: 6px;
+  }
+  .gal-item {
+    overflow: hidden; position: relative;
+    background: var(--charcoal);
+    cursor: pointer;
+  }
+  .gal-item::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.5));
+    transition: opacity 0.3s;
+  }
+  .gal-item:hover::after { opacity: 0; }
+  .gal-inner {
+    width: 100%; height: 100%;
+    transition: transform 0.6s ease;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gal-item:hover .gal-inner { transform: scale(1.04); }
+  .gal-inner-bg {
+    position: absolute; inset: 0;
+  }
+  /* Layout spans */
+  .g1 { grid-column: span 5; grid-row: span 2; }
+  .g2 { grid-column: span 4; grid-row: span 1; }
+  .g3 { grid-column: span 3; grid-row: span 1; }
+  .g4 { grid-column: span 4; grid-row: span 1; }
+  .g5 { grid-column: span 3; grid-row: span 2; }
+  .g6 { grid-column: span 4; grid-row: span 1; }
+  .g7 { grid-column: span 5; grid-row: span 1; }
+  .g8 { grid-column: span 4; grid-row: span 1; }
+
+  /* Warm cinematic gradients simulating wedding photos */
+  .gal-col-1 .gal-inner-bg { background: linear-gradient(135deg, #1a1208 0%, #3d2910 50%, #261a0a 100%); }
+  .gal-col-2 .gal-inner-bg { background: linear-gradient(135deg, #0f0c08 0%, #2a1f12 60%, #1a120a 100%); }
+  .gal-col-3 .gal-inner-bg { background: linear-gradient(135deg, #241810 0%, #3a2914 50%, #1c1208 100%); }
+  .gal-col-4 .gal-inner-bg { background: linear-gradient(160deg, #1c1510 0%, #2e200e 50%, #181008 100%); }
+  .gal-col-5 .gal-inner-bg { background: linear-gradient(120deg, #140e08 0%, #2a1e0e 60%, #1a1208 100%); }
+  .gal-col-6 .gal-inner-bg { background: linear-gradient(145deg, #201812 0%, #382815 50%, #201408 100%); }
+  .gal-col-7 .gal-inner-bg { background: linear-gradient(135deg, #161008 0%, #2a1e10 55%, #1c1408 100%); }
+  .gal-col-8 .gal-inner-bg { background: linear-gradient(150deg, #1e1510 0%, #321f0f 50%, #1a1008 100%); }
+
+  .gal-overlay-text {
+    position: absolute; bottom: 20px; left: 20px;
+    z-index: 5; font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; color: rgba(255,255,255,0.12);
+    font-style: italic; pointer-events: none;
+  }
+  /* photo-like elements */
+  .gal-decoration {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.06;
+  }
+  .gal-decoration span { font-size: 5rem; color: var(--gold-pale); }
+
+  /* ─── EXPERIENCE ─── */
+  #experience { background: var(--warm-white); }
+  .exp-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .exp-steps { display: flex; flex-direction: column; gap: 0; }
+  .exp-step {
+    display: flex; gap: 28px;
+    padding: 32px 0;
+    border-bottom: 1px solid var(--beige-dark);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .exp-step:first-child { border-top: 1px solid var(--beige-dark); }
+  .exp-step:hover { padding-left: 8px; }
+  .exp-step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; color: var(--gold);
+    font-weight: 300; flex-shrink: 0;
+    padding-top: 2px; min-width: 28px;
+  }
+  .exp-step-body {}
+  .exp-step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; font-weight: 400;
+    margin-bottom: 8px;
+  }
+  .exp-step-desc { font-size: 0.88rem; color: var(--text-mid); line-height: 1.7; }
+  .exp-visual {
+    background: var(--black);
+    height: 560px;
+    position: relative; overflow: hidden;
+    display: flex; align-items: flex-end;
+    padding: 48px;
+  }
+  .exp-visual-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #0f0c08 0%, #1a130a 40%, #0a0704 100%); }
+  .exp-visual-orb {
+    position: absolute; width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(201,168,76,0.12) 0%, transparent 70%);
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    animation: orb-float 6s ease-in-out infinite;
+  }
+  .exp-quote {
+    position: relative; z-index: 2;
+  }
+  .exp-quote-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 300;
+    color: var(--white); line-height: 1.3;
+    font-style: italic; margin-bottom: 20px;
+  }
+  .exp-quote-author { font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); }
+
+  /* ─── WHY FOTO MAGIC ─── */
+  #why { background: var(--black); }
+  .why-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1px; background: rgba(255,255,255,0.06);
+    margin-top: 64px;
+  }
+  .why-item {
+    background: var(--black);
+    padding: 48px 40px;
+    transition: background 0.3s;
+  }
+  .why-item:hover { background: #141414; }
+  .why-item-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.5rem; font-weight: 300;
+    color: rgba(201,168,76,0.15); line-height: 1;
+    display: block; margin-bottom: 20px;
+  }
+  .why-item-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem; color: var(--white);
+    margin-bottom: 14px;
+  }
+  .why-item-desc { font-size: 0.85rem; color: rgba(255,255,255,0.38); line-height: 1.7; }
+
+  /* ─── TESTIMONIALS ─── */
+  #testimonials { background: var(--beige); }
+  .testi-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; margin-top: 56px; }
+  .testi-card { background: var(--white); padding: 40px 36px; border: 1px solid var(--beige-dark); }
+  .testi-stars { color: var(--gold); font-size: 0.8rem; margin-bottom: 20px; letter-spacing: 4px; }
+  .testi-text { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; line-height: 1.65; font-style: italic; color: var(--off-black); margin-bottom: 24px; }
+  .testi-author { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted); }
+  .testi-author strong { color: var(--off-black); display: block; margin-bottom: 2px; }
+
+  /* ─── CONTACT ─── */
+  #contact { background: var(--off-black); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+  .contact-info .section-title { margin-bottom: 24px; }
+  .contact-desc { font-size: 0.95rem; color: rgba(255,255,255,0.45); line-height: 1.8; margin-bottom: 40px; }
+  .contact-details { display: flex; flex-direction: column; gap: 24px; }
+  .contact-detail { display: flex; gap: 20px; align-items: flex-start; }
+  .contact-detail-icon { font-size: 1.1rem; margin-top: 2px; }
+  .contact-detail-text { }
+  .contact-detail-label { font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--gold); margin-bottom: 4px; }
+  .contact-detail-value { font-size: 0.92rem; color: rgba(255,255,255,0.65); }
+  .contact-detail-value a { color: rgba(255,255,255,0.65); text-decoration: none; }
+  .contact-detail-value a:hover { color: var(--gold-light); }
+
+  /* Form */
+  .contact-form { display: flex; flex-direction: column; gap: 20px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form-group { display: flex; flex-direction: column; gap: 8px; }
+  .form-label { font-size: 0.65rem; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+  .form-input, .form-select, .form-textarea {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    padding: 14px 18px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.88rem;
+    transition: border-color 0.3s;
+    outline: none;
+    font-weight: 300;
+  }
+  .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold); }
+  .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,0.2); }
+  .form-select { appearance: none; cursor: pointer; }
+  .form-select option { background: var(--charcoal); }
+  .form-textarea { resize: vertical; min-height: 120px; }
+  .form-submit {
+    background: var(--gold); color: var(--black);
+    padding: 18px 40px; border: none; cursor: pointer;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.72rem; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500;
+    transition: all 0.3s; align-self: flex-start;
+  }
+  .form-submit:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.25); }
+  .form-note { font-size: 0.75rem; color: rgba(255,255,255,0.25); margin-top: -8px; }
+  .success-msg { display: none; background: rgba(201,168,76,0.1); border: 1px solid var(--gold); padding: 16px 20px; color: var(--gold-light); font-size: 0.88rem; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    background: var(--black);
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding: 60px 0 36px;
+  }
+  .footer-grid {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 60px; margin-bottom: 48px;
+  }
+  .footer-brand-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 400; color: var(--white);
+    margin-bottom: 12px;
+  }
+  .footer-brand-name span { color: var(--gold); }
+  .footer-tagline { font-size: 0.82rem; color: rgba(255,255,255,0.3); line-height: 1.7; max-width: 240px; }
+  .footer-col-title { font-size: 0.62rem; letter-spacing: 0.24em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .footer-links a { font-size: 0.84rem; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.3s; }
+  .footer-links a:hover { color: rgba(255,255,255,0.8); }
+  .footer-bottom {
+    border-top: 1px solid rgba(255,255,255,0.06);
+    padding-top: 28px;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .footer-copy { font-size: 0.75rem; color: rgba(255,255,255,0.2); }
+  .footer-social { display: flex; gap: 20px; }
+  .footer-social a { font-size: 0.72rem; letter-spacing: 0.14em; color: rgba(255,255,255,0.3); text-decoration: none; transition: color 0.3s; text-transform: uppercase; }
+  .footer-social a:hover { color: var(--gold); }
+
+  /* ─── FLOATING CTA ─── */
+  .float-cta {
+    position: fixed; bottom: 32px; right: 32px; z-index: 999;
+    display: flex; flex-direction: column; align-items: flex-end; gap: 12px;
+  }
+  .float-btn {
+    background: var(--gold); color: var(--black);
+    padding: 14px 24px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.68rem; letter-spacing: 0.2em;
+    text-transform: uppercase; font-weight: 500;
+    border: none; cursor: pointer; text-decoration: none;
+    box-shadow: 0 8px 32px rgba(201,168,76,0.35);
+    transition: all 0.3s;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .float-btn:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 16px 48px rgba(201,168,76,0.4); }
+  .float-badge {
+    background: #ef4444; color: white;
+    width: 8px; height: 8px; border-radius: 50%;
+    animation: pulse-badge 2s infinite;
+    flex-shrink: 0;
+  }
+  @keyframes pulse-badge { 0%,100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.4); opacity: 0.7; } }
+  .availability-msg {
+    background: rgba(10,10,10,0.9); color: rgba(255,255,255,0.7);
+    padding: 8px 14px; font-size: 0.68rem; letter-spacing: 0.1em;
+    backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.08);
+    white-space: nowrap;
+  }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  .reveal {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── MOBILE NAV MENU ─── */
+  .mobile-menu {
+    display: none; position: fixed; inset: 0;
+    background: var(--black); z-index: 998;
+    flex-direction: column; align-items: center; justify-content: center;
+    gap: 32px;
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem; font-weight: 300;
+    color: var(--white); text-decoration: none;
+    transition: color 0.3s;
+  }
+  .mobile-menu a:hover { color: var(--gold); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 1024px) {
+    .packages-grid, .pb-packages-grid, .combo-grid { grid-template-columns: 1fr 1fr; }
+    .testi-grid { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .why-grid { grid-template-columns: 1fr 1fr; }
+    .pb-features { grid-template-columns: 1fr 1fr; }
+    .gallery-mosaic { grid-template-rows: repeat(3, 140px); }
+  }
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 16px 24px; }
+    .nav-links, .nav-cta { display: none; }
+    .hamburger { display: flex; }
+    .container { padding: 0 24px; }
+    section { padding: 80px 0; }
+    .hero-content { padding: 60px 24px; }
+    .hero-h1 { font-size: 3rem; }
+    .story-grid, .exp-grid, .contact-grid, .services-intro-grid { grid-template-columns: 1fr; gap: 48px; }
+    .story-visual { height: 320px; }
+    .story-img-main { width: 85%; height: 260px; }
+    .story-img-accent { height: 180px; }
+    .packages-grid, .pb-packages-grid, .combo-grid, .testi-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .pb-features { grid-template-columns: 1fr 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 36px; }
+    .footer-bottom { flex-direction: column; gap: 16px; text-align: center; }
+    .services-cards { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .gallery-mosaic {
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .g1, .g2, .g3, .g4, .g5, .g6, .g7, .g8 { grid-column: span 1; grid-row: span 1; height: 160px; }
+    .float-cta { bottom: 20px; right: 16px; }
+    .hero-scroll { display: none; }
+    .story-stats { grid-template-columns: 1fr 1fr 1fr; }
+  }
+  /* ─── GALLERY IMAGE STYLES ─── */
+  .gal-img {
+    width: 100%; height: 100%;
+    object-fit: cover; display: block;
+    transition: transform 0.6s ease;
+  }
+  .gal-item:hover .gal-img { transform: scale(1.05); }
+  .gal-placeholder {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column;
+  }
+  .gal-zoom-icon {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    color: white; font-size: 2rem;
+    transition: all 0.3s ease;
+    z-index: 10; pointer-events: none;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  }
+  .gal-item { cursor: pointer; }
+  .gal-item:hover .gal-zoom-icon { transform: translate(-50%, -50%) scale(1); }
+  .gal-item:hover::after { opacity: 0.4; }
+
+  /* ─── LIGHTBOX ─── */
+  #lightbox {
+    display: none;
+    position: fixed; inset: 0; z-index: 9998;
+    background: rgba(0,0,0,0.96);
+    backdrop-filter: blur(12px);
+    align-items: center; justify-content: center;
+    animation: lb-fade 0.25s ease;
+  }
+  #lightbox.open { display: flex; }
+  @keyframes lb-fade { from { opacity: 0; } to { opacity: 1; } }
+
+  .lb-content {
+    position: relative;
+    max-width: 90vw; max-height: 88vh;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #lb-img {
+    max-width: 90vw; max-height: 85vh;
+    object-fit: contain;
+    display: block;
+    animation: lb-zoom 0.3s cubic-bezier(0.16,1,0.3,1);
+    border: 1px solid rgba(201,168,76,0.15);
+  }
+  @keyframes lb-zoom { from { transform: scale(0.92); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  .lb-placeholder {
+    display: none;
+    width: 60vw; max-width: 700px;
+    height: 60vh;
+    align-items: center; justify-content: center;
+    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(255,255,255,0.02);
+  }
+  .lb-placeholder.show { display: flex; }
+
+  .lb-close {
+    position: fixed; top: 28px; right: 36px;
+    background: none; border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7); font-size: 1.1rem;
+    width: 44px; height: 44px; cursor: pointer;
+    transition: all 0.2s; z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lb-close:hover { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.5); }
+
+  .lb-arrow {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    background: none; border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.6); font-size: 2.5rem;
+    width: 52px; height: 52px; cursor: pointer;
+    transition: all 0.2s; z-index: 10;
+    display: flex; align-items: center; justify-content: center;
+    line-height: 1;
+  }
+  .lb-arrow:hover { background: rgba(255,255,255,0.08); color: white; border-color: var(--gold); }
+  .lb-prev { left: 24px; }
+  .lb-next { right: 24px; }
+
+  .lb-counter {
+    position: absolute; bottom: -36px; left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.68rem; letter-spacing: 0.22em;
+    text-transform: uppercase; color: rgba(255,255,255,0.3);
+  }
+
+  /* ─── GALLERY EXPAND ─── */
+  .gallery-mosaic-extra {
+    display: none;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .gallery-mosaic-extra.open {
+    display: grid;
+    animation: fadeInUp 0.5s ease;
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .gal-item-extra {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    background: var(--charcoal);
+  }
+  .gal-item-extra .gal-img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+  .gal-item-extra:hover .gal-img { transform: scale(1.05); }
+  .gal-item-extra::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.4));
+    transition: opacity 0.3s;
+  }
+  .gal-item-extra:hover::after { opacity: 0; }
+  .gal-item-extra .gal-zoom-icon {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    color: white; font-size: 2rem;
+    transition: all 0.3s ease;
+    z-index: 10; pointer-events: none;
+  }
+  .gal-item-extra:hover .gal-zoom-icon { transform: translate(-50%,-50%) scale(1); }
+
+  .btn-gallery-expand {
+    background: transparent;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold);
+    padding: 16px 48px;
+    font-family: 'Jost', sans-serif;
+    font-size: 0.75rem; letter-spacing: 0.22em;
+    text-transform: uppercase; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-gallery-expand:hover {
+    background: rgba(201,168,76,0.08);
+    border-color: var(--gold);
+    box-shadow: 0 0 32px rgba(201,168,76,0.1);
+  }
+
+  @media (max-width: 768px) {
+    .gallery-mosaic-extra { grid-template-columns: repeat(2, 1fr); }
+    .gal-item-extra { height: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <a href="#" class="nav-logo">
+    <img src="logo 1.jpeg" alt="Foto Magic" style="height: 44px; width: auto; display: block;">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#story">About</a></li>
+    <li><a href="#wedding">Weddings</a></li>
+    <li><a href="#photobooth">Photobooth</a></li>
+    <li><a href="#combo">Combo</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Book Now</a>
+  <div class="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#story" onclick="toggleMenu()">About</a>
+  <a href="#wedding" onclick="toggleMenu()">Weddings</a>
+  <a href="#photobooth" onclick="toggleMenu()">Photobooth</a>
+  <a href="#combo" onclick="toggleMenu()">Combo Packages</a>
+  <a href="#gallery" onclick="toggleMenu()">Gallery</a>
+  <a href="#contact" onclick="toggleMenu()">Contact & Book</a>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-photos">
+    <div class="hero-photo hp1"></div>
+    <div class="hero-photo hp2"></div>
+    <div class="hero-photo hp3"></div>
+    <div class="hero-photo hp4"></div>
+    <div class="hero-photo hp5"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="hero-eyebrow-line"></div>
+      <span>Kathmandu, Nepal · Est. 2026</span>
+    </div>
+    <h1 class="hero-h1">Every Moment,<br><em>Derserves To Be Remembered</em></h1>
+    <p class="hero-sub">Premium wedding photography, cinematic videography, and seamless photobooth experiences — all under one team.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-gold">Check Availability</a>
+      <a href="#wedding" class="btn-ghost-light">View Packages</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STORY -->
+<section id="story">
+  <div class="container">
+    <div class="story-grid">
+      <div class="story-visual reveal">
+        <div class="story-img-main">
+          <img src="" alt="">
+          <div style="text-align:center; color: rgba(201,168,76,0.25); font-family: 'Cormorant Garamond', serif; font-style:italic; font-size:1.2rem;">Wedding Gallery</div>
+        </div>
+        <div class="story-img-accent">
+          <div style="text-align:center; color: rgba(100,80,40,0.4); font-family: 'Cormorant Garamond', serif; font-style:italic; font-size:0.9rem;">Photobooth Moments</div>
+        </div>
+        <div class="story-gold-bar"></div>
+      </div>
+      <div class="story-text">
+        <div class="section-label reveal">
+          <div class="section-label-line"></div>
+          <span>Our Story</span>
+        </div>
+        <h2 class="section-title reveal reveal-delay-1">We Don't Just Capture Moments — <em>We Craft Memories</em></h2>
+        <p class="story-body reveal reveal-delay-2">Foto Magic was born from a passion for telling love stories with intention. Based in Kathmandu, we bring together cinematic artistry and seamless coordination so you can be fully present on your wedding day.</p>
+        <p class="story-body reveal reveal-delay-2">From our intimate photography sessions to our premium photobooth experience, every element is designed to feel effortless for you and extraordinary for your guests.</p>
+        <div class="story-stats reveal reveal-delay-3">
+          <div class="story-stat">
+            <span class="stat-num">200+</span>
+            <span class="stat-label">Weddings</span>
+          </div>
+          <div class="story-stat">
+            <span class="stat-num">5★</span>
+            <span class="stat-label">Avg Rating</span>
+          </div>
+          <div class="story-stat">
+            <span class="stat-num">1</span>
+            <span class="stat-label">Unified Team</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES OVERVIEW -->
+<section id="services">
+  <div class="container">
+    <div class="services-intro-grid">
+      <div>
+        <div class="section-label reveal">
+          <div class="section-label-line"></div>
+          <span>What We Do</span>
+        </div>
+        <h2 class="section-title light reveal reveal-delay-1">Two Divisions,<br><em>One Perfect Day</em></h2>
+      </div>
+      <div class="services-intro-right">
+        <p class="services-tagline reveal reveal-delay-2">Everything handled by a single coordinated team. Less stress for you, better results for your guests, and a seamless experience from ceremony to celebration.</p>
+        <a href="#combo" class="btn-ghost-light reveal reveal-delay-3" style="align-self: flex-start;">View Combo Packages →</a>
+      </div>
+    </div>
+  </div>
+  <div class="services-cards">
+    <a href="#wedding" class="service-card reveal">
+      <span class="service-card-icon">📸</span>
+      <span class="service-card-label">Division One</span>
+      <div class="service-card-title">Foto Magic<br>Weddings</div>
+      <p class="service-card-desc">Cinematic photography and videography that tells your love story with elegance, emotion, and artistry.</p>
+      <span class="service-card-arrow">→</span>
+    </a>
+    <a href="#photobooth" class="service-card reveal reveal-delay-2">
+      <span class="service-card-icon">🎪</span>
+      <span class="service-card-label">Division Two</span>
+      <div class="service-card-title">Foto Magic<br>Photobooth</div>
+      <p class="service-card-desc">A premium, well-managed photobooth experience. Instant prints, studio lighting, and a digital gallery delivered within 24 hours.</p>
+      <span class="service-card-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- WEDDING PACKAGES -->
+<section id="wedding">
+  <div class="container">
+    <div class="section-label reveal">
+      <div class="section-label-line"></div>
+      <span>Photography & Videography</span>
+    </div>
+    <h2 class="section-title reveal reveal-delay-1">Wedding <em>Packages</em></h2>
+    <p style="color: var(--text-mid); font-size:0.95rem; margin-top:12px; max-width:520px;" class="reveal reveal-delay-2">Clear, structured packages with no hidden costs. Choose the experience that suits your vision.</p>
+
+    <div class="packages-grid">
+      <!-- Essential -->
+      <div class="pkg-card reveal">
+        <span class="pkg-tier">Essential</span>
+        <div class="pkg-name">Essential</div>
+        <span class="pkg-price">NPR 50,000</span>
+        <div class="pkg-price-sub">Starting price · 1-day coverage</div>
+        <hr class="pkg-divider">
+        <ul class="pkg-features">
+          <li>Full 1-day event coverage</li>
+          <li>Photo + Cinematic video included</li>
+          <li>200 professionally edited photos</li>
+          <li>Cinematic highlight video</li>
+          <li>Online delivery via Google Drive</li>
+        </ul>
+        <a href="#contact" class="btn-pkg btn-pkg-outline">Enquire Now</a>
+      </div>
+      <!-- Classic Popular -->
+      <div class="pkg-card popular reveal reveal-delay-2">
+        <div class="popular-badge">Most Popular</div>
+        <span class="pkg-tier">Classic</span>
+        <div class="pkg-name">Classic</div>
+        <span class="pkg-price">NPR 65,000</span>
+        <div class="pkg-price-sub">Best value · Includes album</div>
+        <hr class="pkg-divider">
+        <ul class="pkg-features">
+          <li>Full 1-day event coverage</li>
+          <li>250–300 professionally edited photos</li>
+          <li>Cinematic storytelling video</li>
+          <li>Printed album (200 photos)</li>
+          <li>Online gallery delivery</li>
+          <li>Priority editing turnaround</li>
+        </ul>
+        <a href="#contact" class="btn-pkg btn-pkg-gold">Book This Package</a>
+      </div>
+      <!-- Premium -->
+      <div class="pkg-card reveal reveal-delay-4">
+        <span class="pkg-tier">Premium</span>
+        <div class="pkg-name">Premium</div>
+        <span class="pkg-price">NPR 85–95K</span>
+        <div class="pkg-price-sub">Full-day · Photobook included</div>
+        <hr class="pkg-divider">
+        <ul class="pkg-features">
+          <li>Complete full-day coverage</li>
+          <li>300–400 professionally edited photos</li>
+          <li>Cinematic storytelling film</li>
+          <li>Premium photobook included</li>
+          <li>Dedicated editing team</li>
+          <li>Express 14-day delivery</li>
+        </ul>
+        <a href="#contact" class="btn-pkg btn-pkg-outline">Enquire Now</a>
+      </div>
+    </div>
+
+    <!-- Addons -->
+    <div class="addons-box reveal">
+      <div class="addons-title">Photography Add-Ons</div>
+      <div class="addons-list">
+        <div class="addon-pill">Photo Album — <span>NPR 5,000</span></div>
+        <div class="addon-pill">Premium Photobook — <span>NPR 15,000</span></div>
+        <div class="addon-pill">Pre-wedding Shoot — <span>On request</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PHOTOBOOTH -->
+<section id="photobooth">
+  <div class="container">
+    <div class="pb-header">
+      <div class="section-label reveal">
+        <div class="section-label-line"></div>
+        <span>Photobooth Experience</span>
+      </div>
+      <h2 class="section-title light reveal reveal-delay-1">Premium <em>Photobooth</em><br>For Your Guests</h2>
+      <p style="color:rgba(255,255,255,0.4); font-size:0.95rem; margin-top:16px; max-width:540px;" class="reveal reveal-delay-2">No chaos. No cheap props chaos. A clean, well-managed photobooth that your guests will actually enjoy — and remember.</p>
+    </div>
+
+    <div class="pb-features">
+      <div class="pb-feature reveal">
+        <span class="pb-feature-icon">📷</span>
+        <div class="pb-feature-name">DSLR Quality</div>
+        <p class="pb-feature-desc">Professional DSLR camera with studio-grade lighting. Not a tablet or webcam.</p>
+      </div>
+      <div class="pb-feature reveal reveal-delay-1">
+        <span class="pb-feature-icon">⚡</span>
+        <div class="pb-feature-name">Instant Prints</div>
+        <p class="pb-feature-desc">High-quality prints in seconds. Your guests take home a memory, not a promise.</p>
+      </div>
+      <div class="pb-feature reveal reveal-delay-2">
+        <span class="pb-feature-icon">🎨</span>
+        <div class="pb-feature-name">Minimal Templates</div>
+        <p class="pb-feature-desc">One beautiful template per event. Clean, consistent, and premium looking.</p>
+      </div>
+      <div class="pb-feature reveal reveal-delay-3">
+        <span class="pb-feature-icon">☁️</span>
+        <div class="pb-feature-name">Digital Gallery</div>
+        <p class="pb-feature-desc">Full digital gallery delivered within 24 hours via Google Drive.</p>
+      </div>
+    </div>
+
+    <div class="pb-packages-grid">
+      <!-- Essential -->
+      <div class="pkg-card dark reveal">
+        <span class="pkg-tier">Essential</span>
+        <div class="pkg-name">Essential</div>
+        <span class="pkg-price">NPR 28,000</span>
+        <div class="pkg-price-sub">3 hours · 200 prints</div>
+        <hr class="pkg-divider">
+        <ul class="pkg-features">
+          <li>3 hours of operation</li>
+          <li>200 instant prints</li>
+          <li>1 clean template included</li>
+          <li>Props & backdrop included</li>
+          <li>On-site operator</li>
+        </ul>
+        <a href="#contact" class="btn-pkg btn-pkg-dark-outline">Enquire Now</a>
+      </div>
+      <!-- Classic -->
+      <div class="pkg-card popular reveal reveal-delay-2">
+        <div class="popular-badge">Most Popular</div>
+        <span class="pkg-tier">Classic</span>
+        <div class="pkg-name">Classic</div>
+        <span class="pkg-price">NPR 38,000</span>
+        <div class="pkg-price-sub">4 hours · 300 prints · Custom design</div>
+        <hr class="pkg-divider">
+        <ul class="pkg-features">
+          <li>4 hours of operation</li>
+          <li>300 instant prints</li>
+          <li>Choice of 2 template designs</li>
+          <li>Custom name & date on prints</li>
+          <li>Props & backdrop included</li>
+          <li>Digital gallery (24-hr delivery)</li>
+        </ul>
+        <a href="#contact" class="btn-pkg btn-pkg-gold">Book This Package</a>
+      </div>
+      <!-- Premium -->
+      <div class="pkg-card dark reveal reveal-delay-4">
+        <span class="pkg-tier">Premium</span>
+        <div class="pkg-name">Premium</div>
+        <span class="pkg-price">NPR 50,000</span>
+        <div class="pkg-price-sub">5 hours · 400–500 prints</div>
+        <hr class="pkg-divider">
+        <ul class="pkg-features">
+          <li>5 hours of operation</li>
+          <li>400–500 instant prints</li>
+          <li>Fully custom template design</li>
+          <li>Premium backdrop included</li>
+          <li>Priority setup & breakdown</li>
+          <li>Digital gallery (24-hr delivery)</li>
+        </ul>
+        <a href="#contact" class="btn-pkg btn-pkg-dark-outline">Enquire Now</a>
+      </div>
+    </div>
+
+    <div class="pb-addons reveal">
+      <div class="addons-title">Photobooth Add-Ons</div>
+      <div class="addons-list">
+        <div class="addon-pill dark">Extra Hour — <span>NPR 6,000</span></div>
+        <div class="addon-pill dark">Extra Prints — <span>NPR 40–60/print</span></div>
+        <div class="addon-pill dark">Custom Template — <span>NPR 3,000</span></div>
+        <div class="addon-pill dark">Custom Backdrop — <span>NPR 5,000–10,000</span></div>
+        <div class="addon-pill dark">Photobooth Album — <span>NPR 7,000</span></div>
+        <div class="addon-pill dark">Guest Video Messages — <span>NPR 5,000–8,000</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMBO PACKAGES -->
+<section id="combo">
+  <div class="container">
+    <div class="combo-header">
+      <div class="section-label reveal">
+        <div class="section-label-line"></div>
+        <span>Smart Savings</span>
+      </div>
+      <h2 class="section-title reveal reveal-delay-1">Combo <em>Packages</em></h2>
+      <p class="combo-sub reveal reveal-delay-2">Everything under one team. Better coordination, less stress, and real savings. The most popular choice for modern Nepali weddings.</p>
+    </div>
+    <div class="combo-grid">
+      <!-- Essential Combo -->
+      <div class="combo-card reveal">
+        <span class="pkg-tier">Essential Combo</span>
+        <div class="pkg-name" style="font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; margin-bottom:8px;">Essential</div>
+        <span class="pkg-price" style="font-family:'Cormorant Garamond',serif; font-size:2.8rem; font-weight:300; color:var(--gold); display:block; line-height:1; margin-bottom:8px;">NPR 75,000</span>
+        <div class="combo-savings">Save vs Booking Separately</div>
+        <div class="combo-includes">
+          <div class="combo-includes-item">Wedding Essential (Photo + Video)</div>
+          <div class="combo-includes-item">Photobooth Essential (3 hrs)</div>
+          <div class="combo-includes-item">One coordinated team</div>
+        </div>
+        <a href="#contact" class="btn-pkg btn-pkg-outline">Enquire Now</a>
+        <p class="combo-value-prop">"Perfect for intimate weddings who want both services at accessible pricing."</p>
+      </div>
+      <!-- Classic Combo -->
+      <div class="combo-card popular-combo reveal reveal-delay-2">
+        <div class="popular-badge">Most Popular</div>
+        <span class="pkg-tier">Classic Combo</span>
+        <div class="pkg-name" style="font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; margin-bottom:8px; color:white;">Classic</div>
+        <span class="pkg-price" style="font-family:'Cormorant Garamond',serif; font-size:2.8rem; font-weight:300; color:var(--gold); display:block; line-height:1; margin-bottom:8px;">NPR 90,000</span>
+        <div class="combo-savings">Best Value Combination</div>
+        <div class="combo-includes">
+          <div class="combo-includes-item">Wedding Classic (Album included)</div>
+          <div class="combo-includes-item">Photobooth Classic (4 hrs + gallery)</div>
+          <div class="combo-includes-item">Custom name & date prints</div>
+          <div class="combo-includes-item">Priority coordination</div>
+        </div>
+        <a href="#contact" class="btn-pkg btn-pkg-gold">Book This Combo</a>
+        <p class="combo-value-prop">"The perfect balance of quality, coverage, and guest experience."</p>
+      </div>
+      <!-- Premium Combo -->
+      <div class="combo-card reveal reveal-delay-4">
+        <span class="pkg-tier">Premium Combo</span>
+        <div class="pkg-name" style="font-family:'Cormorant Garamond',serif; font-size:2rem; font-weight:300; margin-bottom:8px;">Premium</div>
+        <span class="pkg-price" style="font-family:'Cormorant Garamond',serif; font-size:2.8rem; font-weight:300; color:var(--gold); display:block; line-height:1; margin-bottom:8px;">NPR 1,20,000</span>
+        <div class="combo-savings">Complete Wedding Experience</div>
+        <div class="combo-includes">
+          <div class="combo-includes-item">Wedding Premium (Photobook + Film)</div>
+          <div class="combo-includes-item">Photobooth Premium (5 hrs, custom)</div>
+          <div class="combo-includes-item">Premium backdrop & template</div>
+          <div class="combo-includes-item">Priority setup & express delivery</div>
+        </div>
+        <a href="#contact" class="btn-pkg btn-pkg-outline">Enquire Now</a>
+        <p class="combo-value-prop">"For couples who want nothing short of extraordinary."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" style="padding-top:100px; padding-bottom:100px;">
+  <div class="container">
+    <div class="gallery-header">
+      <div class="section-label reveal">
+        <div class="section-label-line"></div>
+        <span>Portfolio</span>
+      </div>
+      <h2 class="section-title light reveal reveal-delay-1">Our <em>Work</em></h2>
+    </div>
+  </div>
+  <div style="padding: 0 48px;">
+
+    <!-- FIRST 8 — always visible -->
+    <div class="gallery-mosaic reveal" id="galleryMain">
+      <div class="gal-item g1" onclick="openLightbox(0)">
+        <img src="images/FotoFactoryimg 1.jpeg" alt="Wedding photo 1" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item g2" onclick="openLightbox(1)">
+        <img src="images/FotoFactoryimg 2.jpeg" alt="Wedding photo 2" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item g3" onclick="openLightbox(2)">
+        <img src="images/FotoFactoryimg 3.jpeg" alt="Wedding photo 3" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item g4" onclick="openLightbox(3)">
+        <img src="images/FotoFactoryimg 4.jpeg" alt="Wedding photo 4" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item g5" onclick="openLightbox(4)">
+        <img src="images/FotoFactoryimg 5.jpeg" alt="Wedding photo 5" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item g6" onclick="openLightbox(5)">
+        <img src="images/FotoFactoryimg 6.jpeg" alt="Wedding photo 6" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item g7" onclick="openLightbox(6)">
+        <img src="images/FotoFactoryimg 7.jpeg" alt="Wedding photo 7" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item g8" onclick="openLightbox(7)">
+        <img src="images/FotoFactoryimg 8.jpeg" alt="Wedding photo 8" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+    </div>
+
+    <!-- REMAINING 10 — hidden until expanded -->
+    <div class="gallery-mosaic-extra" id="galleryExtra">
+      <div class="gal-item-extra" onclick="openLightbox(8)">
+        <img src="images/FotoFactoryimg 9.jpeg" alt="Wedding photo 9" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item-extra" onclick="openLightbox(9)">
+        <img src="images/FotoFactoryimg 10.jpeg" alt="Wedding photo 10" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item-extra" onclick="openLightbox(10)">
+        <img src="images/FotoFactoryimg 11.jpeg" alt="Wedding photo 11" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item-extra" onclick="openLightbox(11)">
+        <img src="images/FotoFactoryimg 12.jpeg" alt="Wedding photo 12" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item-extra" onclick="openLightbox(12)">
+        <img src="images/FotoFactoryimg 13.jpeg" alt="Wedding photo 13" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item-extra" onclick="openLightbox(13)">
+        <img src="images/FotoFactoryimg 14.jpeg" alt="Wedding photo 14" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item-extra" onclick="openLightbox(14)">
+        <img src="images/FotoFactoryimg 15.jpeg" alt="Wedding photo 15" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item-extra" onclick="openLightbox(15)">
+        <img src="images/FotoFactoryimg 16.jpeg" alt="Wedding photo 16" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item-extra" onclick="openLightbox(16)">
+        <img src="images/FotoFactoryimg 17.jpeg" alt="Wedding photo 17" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+      <div class="gal-item-extra" onclick="openLightbox(17)">
+        <img src="images/FotoFactoryimg 18.jpeg" alt="Wedding photo 18" class="gal-img">
+        <div class="gal-zoom-icon">⊕</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- EXPAND / COLLAPSE BUTTON -->
+  <div class="container" style="margin-top:48px; text-align:center;">
+    <button class="btn-gallery-expand" id="galleryExpandBtn" onclick="toggleGallery()">
+      <span id="galleryBtnText">View All 18 Photos</span>
+      <span id="galleryBtnIcon" style="margin-left:10px; display:inline-block; transition: transform 0.3s;">↓</span>
+    </button>
+    <p style="color:rgba(255,255,255,0.2); font-size:0.75rem; letter-spacing:0.1em; margin-top:20px; font-style:italic;">Click any photo to view full size</p>
+  </div>
+</section>
+
+<!-- EXPERIENCE / HOW IT WORKS -->
+<section id="experience">
+  <div class="container">
+    <div class="exp-grid">
+      <div>
+        <div class="section-label reveal">
+          <div class="section-label-line"></div>
+          <span>The Process</span>
+        </div>
+        <h2 class="section-title reveal reveal-delay-1">What Working<br>With Us <em>Feels Like</em></h2>
+        <div class="exp-steps" style="margin-top:40px;">
+          <div class="exp-step reveal">
+            <div class="exp-step-num">01</div>
+            <div class="exp-step-body">
+              <div class="exp-step-title">Reach Out & Consultation</div>
+              <p class="exp-step-desc">Share your date and vision. We'll respond within 24 hours with a personalized recommendation and check availability for you.</p>
+            </div>
+          </div>
+          <div class="exp-step reveal reveal-delay-1">
+            <div class="exp-step-num">02</div>
+            <div class="exp-step-body">
+              <div class="exp-step-title">Choose Your Package</div>
+              <p class="exp-step-desc">No confusing add-on surprises. Pick the package that fits your day, or let us guide you toward the best value combo.</p>
+            </div>
+          </div>
+          <div class="exp-step reveal reveal-delay-2">
+            <div class="exp-step-num">03</div>
+            <div class="exp-step-body">
+              <div class="exp-step-title">We Handle Everything</div>
+              <p class="exp-step-desc">Our team coordinates setup, timing, and execution. You focus on getting married. We focus on capturing every moment.</p>
+            </div>
+          </div>
+          <div class="exp-step reveal reveal-delay-3">
+            <div class="exp-step-num">04</div>
+            <div class="exp-step-body">
+              <div class="exp-step-title">Relive Every Moment</div>
+              <p class="exp-step-desc">Your edited photos and video are delivered on time. Your photobooth gallery arrives within 24 hours of the event.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="exp-visual reveal reveal-delay-2">
+        <div class="exp-visual-bg"></div>
+        <div class="exp-visual-orb"></div>
+        <div class="exp-quote">
+          <p class="exp-quote-text">"We handled everything so they could be present for every heartbeat of their day."</p>
+          <div class="exp-quote-author">— Foto Magic Team</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY FOTO MAGIC -->
+<section id="why">
+  <div class="container">
+    <div class="section-label reveal">
+      <div class="section-label-line"></div>
+      <span>Why Choose Us</span>
+    </div>
+    <h2 class="section-title light reveal reveal-delay-1">What Makes Us <em>Different</em></h2>
+    <div class="why-grid">
+      <div class="why-item reveal">
+        <span class="why-item-num">01</span>
+        <div class="why-item-title">Clear Pricing, Zero Surprises</div>
+        <p class="why-item-desc">Our packages include everything — backdrop, props, operator. No hidden extras. What you see is exactly what you pay.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-1">
+        <span class="why-item-num">02</span>
+        <div class="why-item-title">One Team, Total Coordination</div>
+        <p class="why-item-desc">Photography, video, and photobooth under one roof. No miscommunication between vendors. Just smooth, synchronized coverage.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-2">
+        <span class="why-item-num">03</span>
+        <div class="why-item-title">Premium Output, Every Time</div>
+        <p class="why-item-desc">Cinematic editing, minimal design templates, and studio lighting. We don't cut corners on the things you'll look at for a lifetime.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-3">
+        <span class="why-item-num">04</span>
+        <div class="why-item-title">Stress-Free Guest Experience</div>
+        <p class="why-item-desc">Our managed photobooth means no lines, no chaos, no confusion. Guests enjoy it. You trust it. Everyone goes home happy.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-4">
+        <span class="why-item-num">05</span>
+        <div class="why-item-title">Fast & Reliable Delivery</div>
+        <p class="why-item-desc">Photobooth gallery in 24 hours. Edited photos and highlight video delivered on the timeline we promise — always.</p>
+      </div>
+      <div class="why-item reveal reveal-delay-4">
+        <span class="why-item-num">06</span>
+        <div class="why-item-title">Experience-Focused Approach</div>
+        <p class="why-item-desc">We don't just show up and shoot. We plan, guide, and create. Your experience matters as much as the final images.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="container">
+    <div class="section-label reveal">
+      <div class="section-label-line"></div>
+      <span>What Couples Say</span>
+    </div>
+    <h2 class="section-title reveal reveal-delay-1">Words From <em>Our Couples</em></h2>
+    <div class="testi-grid">
+      <div class="testi-card reveal">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"Foto Magic made our wedding day feel completely effortless. The photos are breathtaking — we still get emotional looking at them. And our guests absolutely loved the photobooth."</p>
+        <div class="testi-author">
+          <strong>Priya & Rohan Sharma</strong>
+          Kathmandu Wedding — Classic Combo
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-2">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"We were so worried about coordinating multiple vendors. Booking Foto Magic for both photography and the photobooth was the best decision we made. Everything was perfectly in sync."</p>
+        <div class="testi-author">
+          <strong>Anisha & Bikash Thapa</strong>
+          Lalitpur Wedding — Premium Combo
+        </div>
+      </div>
+      <div class="testi-card reveal reveal-delay-4">
+        <div class="testi-stars">★★★★★</div>
+        <p class="testi-text">"The photobooth prints were incredible quality. We had a full line of guests who wanted a photo, but the team kept things so smooth. Received our digital gallery the very next morning."</p>
+        <div class="testi-author">
+          <strong>Sushila & Deepak Karki</strong>
+          Bhaktapur Wedding — Classic Photobooth
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <div class="section-label reveal">
+          <div class="section-label-line"></div>
+          <span>Get In Touch</span>
+        </div>
+        <h2 class="section-title light reveal reveal-delay-1">Let's Plan Your <em>Perfect Day</em></h2>
+        <p class="contact-desc reveal reveal-delay-2">Dates fill up quickly — especially for peak wedding season. Send us a message and we'll confirm availability within 24 hours.</p>
+        <div class="contact-details reveal reveal-delay-3">
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📍</div>
+            <div class="contact-detail-text">
+              <div class="contact-detail-label">Location</div>
+              <div class="contact-detail-value">Kathmandu, Nepal<br><span style="font-size:0.8rem; opacity:0.7;">Serving the Kathmandu Valley & beyond</span></div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📱</div>
+            <div class="contact-detail-text">
+              <div class="contact-detail-label">WhatsApp / Phone</div>
+              <div class="contact-detail-value"><a href="tel:+977XXXXXXXXXX">+977-XXX-XXXXXXX</a></div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">✉️</div>
+            <div class="contact-detail-text">
+              <div class="contact-detail-label">Email</div>
+              <div class="contact-detail-value"><a href="mailto:hello@fotomagic.com.np">hello@fotomagic.com.np</a></div>
+            </div>
+          </div>
+          <div class="contact-detail">
+            <div class="contact-detail-icon">📸</div>
+            <div class="contact-detail-text">
+              <div class="contact-detail-label">Instagram</div>
+              <div class="contact-detail-value"><a href="#">@fotomagic.nepal</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal reveal-delay-2">
+        <!--
+          ┌─────────────────────────────────────────────────────┐
+          │  WEB3FORMS SETUP — 2 things to fill in below:       │
+          │                                                      │
+          │  1. Replace YOUR_ACCESS_KEY_HERE with the key       │
+          │     you got from web3forms.com                      │
+          │                                                      │
+          │  2. Replace YOUR@EMAIL.COM with the email address   │
+          │     where you want to receive enquiries             │
+          └─────────────────────────────────────────────────────┘
+        -->
+        <form
+          class="contact-form"
+          action="https://api.web3forms.com/submit"
+          method="POST"
+          id="enquiryForm"
+        >
+          <!-- Web3Forms hidden config fields -->
+          <input type="hidden" name="access_key" value="API_KEY_HERE">
+          <input type="hidden" name="to" value="ayushmertz1@gmail.com">
+          <input type="hidden" name="subject" value="New Wedding Enquiry — Foto Magic">
+          <input type="hidden" name="from_name" value="Foto Magic Website">
+          <!-- Honeypot spam trap — do not remove -->
+          <input type="checkbox" name="botcheck" style="display:none">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="fname">Your Name *</label>
+              <input type="text" name="your_name" class="form-input" placeholder="Sunita Pradhan" id="fname" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="pname">Partner's Name</label>
+              <input type="text" name="partners_name" class="form-input" placeholder="Anand Shrestha" id="pname">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone / WhatsApp *</label>
+              <input type="tel" name="phone" class="form-input" placeholder="+977 98XXXXXXXX" id="phone" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="wdate">Wedding Date</label>
+              <input type="date" name="wedding_date" class="form-input" id="wdate">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="interest">Interested In</label>
+            <select name="package_interest" class="form-select form-input" id="interest">
+              <option value="">Select a package...</option>
+              <option>Wedding Photography &amp; Videography</option>
+              <option>Photobooth Only</option>
+              <option>Essential Combo (NPR 75,000)</option>
+              <option>Classic Combo — Most Popular (NPR 90,000)</option>
+              <option>Premium Combo (NPR 1,20,000)</option>
+              <option>Not sure — need guidance</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Tell Us About Your Wedding</label>
+            <textarea name="message" class="form-textarea" placeholder="Venue, guest count, vibe, special requests..." id="message"></textarea>
+          </div>
+
+          <p class="form-note">⚡ We respond within 24 hours. Availability is limited — early booking recommended.</p>
+
+          <!-- Success message — shown after submission -->
+          <div class="success-msg" id="successMsg">
+            ✦ Thank you! We've received your enquiry and will reach out within 24 hours to confirm your date.
+          </div>
+
+          <!-- Error message — shown if submission fails -->
+          <div id="errorMsg" style="display:none; background:rgba(239,68,68,0.1); border:1px solid #ef4444; padding:16px 20px; color:#ef4444; font-size:0.88rem; margin-bottom:12px;">
+            ✕ Something went wrong. Please try again or contact us directly on WhatsApp.
+          </div>
+
+          <button type="submit" class="form-submit" id="submitBtn">Check Availability &amp; Book</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <img src="logo 1.jpeg" alt="Foto Magic" style="height: 40px; width: auto; display: block; margin-bottom: 16px;">
+        <p class="footer-tagline">Premium wedding photography, videography, and photobooth experiences. Based in Kathmandu, Nepal.</p>
+      </div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <ul class="footer-links">
+          <li><a href="#wedding">Wedding Photography</a></li>
+          <li><a href="#wedding">Cinematic Videography</a></li>
+          <li><a href="#photobooth">Photobooth Experience</a></li>
+          <li><a href="#combo">Combo Packages</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Packages</div>
+        <ul class="footer-links">
+          <li><a href="#combo">Essential Combo</a></li>
+          <li><a href="#combo">Classic Combo</a></li>
+          <li><a href="#combo">Premium Combo</a></li>
+          <li><a href="#contact">Custom Quote</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Connect</div>
+        <ul class="footer-links">
+          <li><a href="#contact">Book a Date</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">WhatsApp</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Foto Magic. All rights reserved. Kathmandu, Nepal.</div>
+      <div class="footer-social">
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">WhatsApp</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- LIGHTBOX -->
+<div id="lightbox" onclick="closeLightboxOutside(event)">
+  <button class="lb-close" onclick="closeLightbox()">✕</button>
+  <button class="lb-arrow lb-prev" onclick="changeLightbox(-1)">‹</button>
+  <button class="lb-arrow lb-next" onclick="changeLightbox(1)">›</button>
+  <div class="lb-content">
+    <img id="lb-img" src="" alt="Gallery preview">
+    <div class="lb-placeholder" id="lb-placeholder">
+      <div style="text-align:center; color:rgba(201,168,76,0.4);">
+        <div style="font-size:3rem; margin-bottom:16px;">📸</div>
+        <div style="font-family:'Cormorant Garamond',serif; font-size:1.4rem; font-style:italic; color:rgba(255,255,255,0.5);">Photo coming soon</div>
+        <div style="font-size:0.75rem; color:rgba(255,255,255,0.2); margin-top:8px; letter-spacing:0.15em; text-transform:uppercase;">Replace with your wedding image</div>
+      </div>
+    </div>
+    <div class="lb-counter" id="lb-counter">1 / 8</div>
+  </div>
+</div>
+
+<!-- FLOATING CTA -->
+<div class="float-cta" id="floatCta" style="opacity:0; transition: opacity 0.5s;">
+  <div class="availability-msg">🗓 Limited dates left for 2026</div>
+  <a href="#contact" class="float-btn">
+    <div class="float-badge"></div>
+    Book Now
+  </a>
+</div>
+
+<script>
+  // NAV scroll
+  const nav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+    // show float cta after 600px
+    document.getElementById('floatCta').style.opacity = window.scrollY > 600 ? '1' : '0';
+  });
+
+  // Mobile menu
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Form submit
+  function submitForm() {
+    const fname = document.getElementById('fname').value;
+    const phone = document.getElementById('phone').value;
+    if (!fname || !phone) {
+      alert('Please fill in your name and phone number.');
+      return;
+    }
+    document.getElementById('successMsg').style.display = 'block';
+    document.querySelector('.form-submit').textContent = 'Enquiry Sent ✦';
+    document.querySelector('.form-submit').style.background = 'rgba(201,168,76,0.2)';
+    document.querySelector('.form-submit').style.color = 'var(--gold)';
+    document.querySelector('.form-submit').style.border = '1px solid var(--gold)';
+    document.querySelector('.form-submit').disabled = true;
+  }
+
+  // Hero animation delay
+  document.querySelector('.hero-content').style.animationDelay = '0.3s';
+  // ─── LIGHTBOX ───
+  const galleryImages = [
+    'images/FotoFactoryimg 1.jpeg',
+    'images/FotoFactoryimg 2.jpeg',
+    'images/FotoFactoryimg 3.jpeg',
+    'images/FotoFactoryimg 4.jpeg',
+    'images/FotoFactoryimg 5.jpeg',
+    'images/FotoFactoryimg 6.jpeg',
+    'images/FotoFactoryimg 7.jpeg',
+    'images/FotoFactoryimg 8.jpeg',
+    'images/FotoFactoryimg 9.jpeg',
+    'images/FotoFactoryimg 10.jpeg',
+    'images/FotoFactoryimg 11.jpeg',
+    'images/FotoFactoryimg 12.jpeg',
+    'images/FotoFactoryimg 13.jpeg',
+    'images/FotoFactoryimg 14.jpeg',
+    'images/FotoFactoryimg 15.jpeg',
+    'images/FotoFactoryimg 16.jpeg',
+    'images/FotoFactoryimg 17.jpeg',
+    'images/FotoFactoryimg 18.jpeg',
+  ];
+  let currentIndex = 0;
+  let galleryExpanded = false;
+
+  function toggleGallery() {
+    const extra = document.getElementById('galleryExtra');
+    const btnText = document.getElementById('galleryBtnText');
+    const btnIcon = document.getElementById('galleryBtnIcon');
+    galleryExpanded = !galleryExpanded;
+    if (galleryExpanded) {
+      extra.classList.add('open');
+      btnText.textContent = 'Show Less';
+      btnIcon.style.transform = 'rotate(180deg)';
+      // smooth scroll so user sees the new images
+      setTimeout(() => extra.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+    } else {
+      extra.classList.remove('open');
+      btnText.textContent = 'View All 18 Photos';
+      btnIcon.style.transform = 'rotate(0deg)';
+      document.getElementById('gallery').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  function openLightbox(index) {
+    currentIndex = index;
+    const lb = document.getElementById('lightbox');
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    loadLightboxImage(currentIndex);
+  }
+
+  function loadLightboxImage(index) {
+    const img = document.getElementById('lb-img');
+    const placeholder = document.getElementById('lb-placeholder');
+    const counter = document.getElementById('lb-counter');
+    counter.textContent = (index + 1) + ' / ' + galleryImages.length;
+
+    // reset
+    img.style.display = 'none';
+    placeholder.classList.remove('show');
+
+    const src = galleryImages[index];
+    const testImg = new Image();
+    testImg.onload = () => {
+      img.src = src;
+      img.style.display = 'block';
+      // re-trigger animation
+      img.style.animation = 'none';
+      img.offsetHeight; // reflow
+      img.style.animation = 'lb-zoom 0.3s cubic-bezier(0.16,1,0.3,1)';
+    };
+    testImg.onerror = () => {
+      img.style.display = 'none';
+      placeholder.classList.add('show');
+    };
+    testImg.src = src;
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeLightboxOutside(e) {
+    if (e.target === document.getElementById('lightbox')) closeLightbox();
+  }
+
+  function changeLightbox(direction) {
+    currentIndex = (currentIndex + direction + galleryImages.length) % galleryImages.length;
+    loadLightboxImage(currentIndex);
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowRight') changeLightbox(1);
+    if (e.key === 'ArrowLeft') changeLightbox(-1);
+  });
+</script>
+</body>
+</html>
