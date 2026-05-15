@@ -1,0 +1,2 @@
+# fotoMagic
+Solo Project
