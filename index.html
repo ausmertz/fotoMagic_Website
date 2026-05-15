@@ -371,8 +371,9 @@
   /* ─── PACKAGES: WEDDING ─── */
   #wedding { background: var(--warm-white); }
   .packages-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    display: grid; grid-template-columns: 1fr 1.08fr 1fr;
     gap: 24px; margin-top: 64px;
+    align-items: start;
   }
   .pkg-card {
     border: 1px solid var(--beige-dark);
@@ -380,13 +381,19 @@
     position: relative;
     transition: all 0.3s;
     background: var(--white);
+    display: flex;
+    flex-direction: column;
   }
   .pkg-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.08); }
   .pkg-card.popular {
     border-color: var(--gold);
     background: var(--black);
     color: var(--white);
+    padding: 60px 40px;
+    margin-top: -16px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.18);
   }
+  .pkg-card.popular:hover { transform: translateY(-8px); box-shadow: 0 40px 100px rgba(0,0,0,0.22); }
   .popular-badge {
     position: absolute; top: -1px; left: 50%; transform: translateX(-50%);
     background: var(--red); color: var(--white);
@@ -415,7 +422,7 @@
   .pkg-card.popular .pkg-price-sub { color: rgba(255,255,255,0.4); }
   .pkg-divider { border: none; border-top: 1px solid var(--beige-dark); margin: 28px 0; }
   .pkg-card.popular .pkg-divider { border-color: rgba(255,255,255,0.12); }
-  .pkg-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+  .pkg-features { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; flex-grow: 1; }
   .pkg-features li {
     font-size: 0.88rem; line-height: 1.5;
     display: flex; gap: 12px; align-items: flex-start;
@@ -493,8 +500,9 @@
   .pb-feature-desc { font-size: 0.8rem; color: rgba(255,255,255,0.35); line-height: 1.6; }
 
   .pb-packages-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    display: grid; grid-template-columns: 1fr 1.08fr 1fr;
     gap: 24px;
+    align-items: start;
   }
   .pkg-card.dark {
     background: var(--charcoal);
@@ -505,12 +513,23 @@
   .pkg-card.dark .pkg-features li { color: rgba(255,255,255,0.55); }
   .pkg-card.dark .pkg-divider { border-color: rgba(255,255,255,0.1); }
   .pkg-card.dark .pkg-price-sub { color: rgba(255,255,255,0.35); }
+  .pkg-card.dark.popular {
+    padding: 60px 40px;
+    margin-top: -16px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+  }
   .btn-pkg-dark-outline {
     background: transparent;
     border: 1px solid rgba(255,255,255,0.2);
     color: rgba(255,255,255,0.7);
   }
   .btn-pkg-dark-outline:hover { border-color: var(--gold); color: var(--gold); }
+  .pkg-card.dark.popular {
+    padding: 60px 40px;
+    margin-top: -16px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+  }
+  .pkg-card.dark.popular:hover { transform: translateY(-8px); box-shadow: 0 40px 100px rgba(0,0,0,0.5); }
 
   .pb-addons { margin-top: 48px; background: var(--charcoal); border: 1px solid rgba(255,255,255,0.06); padding: 36px 40px; }
   .pb-addons .addons-title { color: var(--white); }
@@ -523,8 +542,9 @@
   .combo-header .section-title { margin-bottom: 16px; }
   .combo-sub { font-size: 1rem; color: var(--text-mid); max-width: 520px; margin: 0 auto; line-height: 1.7; }
   .combo-grid {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    display: grid; grid-template-columns: 1fr 1.08fr 1fr;
     gap: 24px;
+    align-items: start;
   }
   .combo-card {
     background: var(--white);
@@ -532,15 +552,22 @@
     padding: 48px 36px;
     position: relative;
     transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
   }
   .combo-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,0.1); }
   .combo-card.popular-combo {
     background: var(--black); border-color: var(--gold);
     color: var(--white);
+    padding: 60px 40px;
+    margin-top: -16px;
+    box-shadow: 0 32px 80px rgba(0,0,0,0.18);
   }
+  .combo-card.popular-combo:hover { transform: translateY(-8px); box-shadow: 0 40px 100px rgba(0,0,0,0.22); }
   .combo-includes {
     display: flex; flex-direction: column; gap: 8px;
     margin: 24px 0 28px;
+    flex-grow: 1;
   }
   .combo-includes-item {
     display: flex; align-items: center; gap: 10px;
